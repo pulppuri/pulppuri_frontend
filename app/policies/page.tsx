@@ -1,11 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
-import { Search, Heart, MessageCircle, Bookmark, Menu } from "lucide-react"
+import { Search, Heart, MessageCircle, Bookmark, Menu } from 'lucide-react'
 import type { Example, PolicyCategory } from "@/types"
 import { POLICY_CATEGORIES } from "@/lib/constants"
 
@@ -83,6 +83,10 @@ export default function PoliciesPage() {
     // TODO: API call to backend
   }
 
+  const handleCardClick = (id: number) => {
+    router.push(`/policies/${id}`)
+  }
+
   const filteredExamples = examples.filter((ex) => {
     if (selectedCategory !== "전체") {
       const hasCategory = ex.tags?.some((tag) => tag.name === selectedCategory)
@@ -105,23 +109,23 @@ export default function PoliciesPage() {
             placeholder="지역, 정책 검색"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 border-0 bg-transparent focus-visible:ring-0"
+            className="flex-1 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
           />
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="h-9 w-9">
             <Menu className="h-5 w-5" />
           </Button>
         </div>
 
         {/* Category Tabs */}
-        <div className="overflow-x-auto px-4 pb-3">
+        <div className="overflow-x-auto scrollbar-hide px-4 pb-3">
           <div className="flex gap-2">
             {POLICY_CATEGORIES.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                className={`shrink-0 rounded-full px-5 py-2 text-sm font-medium transition-colors whitespace-nowrap ${
                   selectedCategory === category
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-[#d3c1ff] text-primary-foreground"
                     : "bg-muted text-muted-foreground hover:bg-muted/80"
                 }`}
               >
@@ -133,57 +137,75 @@ export default function PoliciesPage() {
 
         {/* Sort Button */}
         <div className="flex justify-end px-4 pb-3">
-          <Button variant="ghost" size="sm" className="gap-1 text-xs text-muted-foreground">
+          <Button variant="ghost" size="sm" className="gap-1 text-xs text-muted-foreground h-8">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" className="opacity-60">
+              <path d="M3 8V2h1v6h1l-1.5 2L2 8h1zm4-6v6H6v1.5L4.5 8 6 6.5V8h1V2h1z" />
+            </svg>
             최신순
           </Button>
         </div>
       </div>
 
       {/* Policy Cards */}
-      <div className="flex-1 space-y-3 p-4">
+      <div className="flex-1 space-y-4 p-4 pb-20">
         {filteredExamples.map((example) => (
           <Card key={example.id} className="overflow-hidden border-0 shadow-sm">
             {/* Thumbnail */}
-            <div className="relative aspect-[2/1] bg-muted">
-              <div className="flex h-full items-center justify-center">
-                <div className="text-muted-foreground/30">
-                  <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+            <div onClick={() => handleCardClick(example.id)} className="cursor-pointer">
+              <div className="relative aspect-[16/9] bg-gradient-to-br from-[#e8deff] to-[#d3c1ff]/30">
+                <div className="flex h-full items-center justify-center">
+                  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" className="text-[#d3c1ff]">
+                    <rect x="4" y="4" width="16" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
+                    <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" opacity="0.4" />
+                    <path d="M4 15l4-4 3 3 5-5 4 4" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
                   </svg>
                 </div>
+                
+                {/* Tags positioned at bottom left of thumbnail */}
+                <div className="absolute bottom-3 left-3 flex gap-2">
+                  {example.tags?.slice(0, 2).map((tag) => (
+                    <span 
+                      key={tag.id} 
+                      className="rounded bg-white/90 backdrop-blur-sm px-2.5 py-1 text-xs font-medium text-foreground shadow-sm"
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="space-y-3 p-4">
+                {/* Title */}
+                <h3 className="text-pretty text-[15px] font-semibold leading-snug">{example.title}</h3>
               </div>
             </div>
 
-            {/* Content */}
-            <div className="space-y-3 p-4">
-              {/* Tags */}
-              <div className="flex gap-2">
-                {example.tags?.slice(0, 2).map((tag) => (
-                  <span key={tag.id} className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                    {tag.name}
-                  </span>
-                ))}
-              </div>
-
-              {/* Title */}
-              <h3 className="text-pretty text-base font-semibold leading-snug">{example.title}</h3>
-
-              {/* Stats */}
+            <div className="px-4 pb-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <button
-                    onClick={() => handleLike(example.id)}
-                    className="flex items-center gap-1 transition-colors hover:text-foreground"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleLike(example.id)
+                    }}
+                    className="flex items-center gap-1.5 transition-colors hover:text-foreground"
                   >
-                    <Heart className={`h-4 w-4 ${example.isLiked ? "fill-red-500 text-red-500" : ""}`} />
-                    <span>{example.likes || 0}</span>
+                    <Heart className={`h-[18px] w-[18px] ${example.isLiked ? "fill-red-500 text-red-500" : ""}`} />
+                    <span className="text-[13px]">{example.likes || 0}</span>
                   </button>
-                  <button className="flex items-center gap-1 transition-colors hover:text-foreground">
-                    <MessageCircle className="h-4 w-4" />
-                    <span>{example.comments || 0}</span>
+                  <button className="flex items-center gap-1.5 transition-colors hover:text-foreground">
+                    <MessageCircle className="h-[18px] w-[18px]" />
+                    <span className="text-[13px]">{example.comments || 0}</span>
                   </button>
                 </div>
-                <button onClick={() => handleBookmark(example.id)} className="transition-colors hover:text-foreground">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleBookmark(example.id)
+                  }}
+                  className="transition-colors hover:text-foreground"
+                >
                   <Bookmark
                     className={`h-5 w-5 ${
                       example.isBookmarked ? "fill-primary text-primary" : "text-muted-foreground"
@@ -197,34 +219,35 @@ export default function PoliciesPage() {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="sticky bottom-0 border-t bg-background">
-        <div className="flex items-center justify-around p-2">
-          <button className="flex flex-col items-center gap-1 px-6 py-2 text-primary">
+      <div className="fixed bottom-0 left-0 right-0 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="flex items-center justify-around py-2">
+          <button className="flex flex-col items-center gap-1 px-8 py-2 text-[#7c5cdb]">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM8 18v-1h8v1H8zm0-3v-1h8v1H8zm0-3v-1h5v1H8z" />
             </svg>
-            <span className="text-xs font-medium">정책 사례</span>
+            <span className="text-[11px] font-medium">정책 사례</span>
           </button>
           <button
             onClick={() => router.push("/proposals")}
-            className="flex flex-col items-center gap-1 px-6 py-2 text-muted-foreground"
+            className="flex flex-col items-center gap-1 px-8 py-2 text-muted-foreground"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <line x1="12" y1="8" x2="12" y2="16" />
-              <line x1="8" y1="12" x2="16" y2="12" />
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
             </svg>
-            <span className="text-xs">정책 제안</span>
+            <span className="text-[11px]">정책 제안</span>
           </button>
           <button
             onClick={() => router.push("/mypage")}
-            className="flex flex-col items-center gap-1 px-6 py-2 text-muted-foreground"
+            className="flex flex-col items-center gap-1 px-8 py-2 text-muted-foreground"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
             </svg>
-            <span className="text-xs">마이페이지</span>
+            <span className="text-[11px]">마이페이지</span>
           </button>
         </div>
       </div>
