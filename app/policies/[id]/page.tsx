@@ -160,9 +160,10 @@ export default function PolicyDetailPage() {
   }
 
   const handleProposePolicy = () => {
-    // Extract the first tag as the category to pre-select
+    // Use the first tag as the category, but map it to the correct POLICY_CATEGORIES value
     const categoryTag = example.tags?.[0]?.name || ""
-    router.push(`/proposals/new?exampleId=${example.id}&category=${encodeURIComponent(categoryTag)}`)
+    console.log("[v0] Navigating to proposal with category:", categoryTag)
+    router.push(`/proposals/new?category=${encodeURIComponent(categoryTag)}`)
   }
 
   const handleProposalClick = (proposalId: number) => {

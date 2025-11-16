@@ -83,8 +83,18 @@ export default function NewProposalPage() {
 
   useEffect(() => {
     const categoryFromUrl = searchParams.get('category')
-    if (categoryFromUrl && POLICY_CATEGORIES.includes(categoryFromUrl as any)) {
-      setSelectedCategories([categoryFromUrl])
+    console.log("[v0] Category from URL:", categoryFromUrl)
+    console.log("[v0] Available categories:", POLICY_CATEGORIES)
+    
+    if (categoryFromUrl) {
+      // Check if the category exists in POLICY_CATEGORIES (excluding "전체")
+      const validCategories = POLICY_CATEGORIES.filter(c => c !== "전체")
+      if (validCategories.includes(categoryFromUrl)) {
+        console.log("[v0] Setting selected category:", categoryFromUrl)
+        setSelectedCategories([categoryFromUrl])
+      } else {
+        console.log("[v0] Category not found in valid categories")
+      }
     }
   }, [searchParams])
 
