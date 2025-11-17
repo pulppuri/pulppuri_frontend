@@ -23,7 +23,10 @@ export default function SignupPage() {
     gender: "",
     job: "",
     region: "",
+    interests: [],
   })
+
+  const interestCategories = ["교육", "교통", "주거", "농업", "청년", "경제", "문화", "보건/복지"]
 
   const handleNext = () => {
     // Validation for each step
@@ -71,8 +74,12 @@ export default function SignupPage() {
       alert("거주 지역을 선택해주세요.")
       return
     }
+    if (step === 8 && formData.interests.length === 0) {
+      alert("관심 분야를 최소 1개 이상 선택해주세요.")
+      return
+    }
 
-    if (step < 7) {
+    if (step < 8) {
       setStep(step + 1)
     } else {
       handleSubmit()
@@ -85,6 +92,15 @@ export default function SignupPage() {
     } else {
       router.back()
     }
+  }
+
+  const handleInterestToggle = (interest: string) => {
+    setFormData(prev => ({
+      ...prev,
+      interests: prev.interests.includes(interest)
+        ? prev.interests.filter(i => i !== interest)
+        : [...prev.interests, interest]
+    }))
   }
 
   const handleSubmit = async () => {
@@ -119,6 +135,7 @@ export default function SignupPage() {
       gender: formData.gender,
       job: formData.job,
       region: formData.region,
+      interests: formData.interests,
       rid: 1,
     }
 
@@ -136,7 +153,7 @@ export default function SignupPage() {
         <Image src="/images/logo.png" alt="옥천 한입" width={120} height={48} />
         <div className="flex-1">
           <div className="flex gap-1">
-            {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
               <div
                 key={i}
                 className={`h-1 flex-1 rounded-full transition-colors ${i <= step ? "bg-primary" : "bg-muted"}`}
@@ -300,11 +317,37 @@ export default function SignupPage() {
               </div>
             </div>
           )}
+
+          {/* Step 8: Interests */}
+          {step === 8 && (
+            <div className="space-y-6">
+              <h1 className="text-balance text-2xl font-bold">관심 분야를 선택해주세요.</h1>
+              <p className="text-sm text-muted-foreground">
+                관심 있는 정책 분야를 선택하면 맞춤형 정책 정보를 받아볼 수 있습니다.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {interestCategories.map((interest) => (
+                  <button
+                    key={interest}
+                    type="button"
+                    onClick={() => handleInterestToggle(interest)}
+                    className={`rounded-full px-6 py-3 text-sm font-medium transition-colors ${
+                      formData.interests.includes(interest)
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-white text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    {interest}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Bottom Button */}
         <Button onClick={handleNext} className="h-14 w-full bg-primary text-lg font-semibold hover:bg-primary/90">
-          {step === 7 ? "완료" : "다음"}
+          {step === 8 ? "완료" : "다음"}
         </Button>
       </div>
     </div>

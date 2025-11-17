@@ -96,6 +96,7 @@ export interface SignupData {
   gender: string
   job: string
   region: string
+  interests: string[] // Added interests field to SignupData
 }
 
 // Policy categories
