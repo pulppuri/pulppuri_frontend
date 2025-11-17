@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from 'next/navigation'
-import { Search, Heart, MessageCircle, Bookmark, ChevronDown } from 'lucide-react'
+import { Search, Heart, MessageCircle, Bookmark, ChevronDown, SlidersHorizontal, ArrowUpDown } from 'lucide-react'
 import type { Proposal, PolicyCategory } from "@/types"
 import { BottomNav } from "@/components/bottom-nav"
 import { POLICY_CATEGORIES } from "@/lib/constants"
@@ -80,129 +80,128 @@ export default function ProposalsPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="flex min-h-screen flex-col bg-[#f5f5f5]">
       {/* Header with Search */}
-      <div className="sticky top-0 z-10 bg-background px-4 pb-3 pt-4">
-        <div className="mb-4 flex items-center gap-3">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+      <div className="sticky top-0 z-10 bg-white border-b border-gray-100">
+        <div className="flex items-center gap-2.5 p-3.5">
+          <div className="flex flex-1 items-center gap-2.5 rounded-xl bg-[#f5f5f5] px-3.5 py-2.5 border border-gray-100">
+            <Search className="h-[18px] w-[18px] text-gray-400 stroke-[1.5]" />
             <input
               type="text"
               placeholder="지역, 정책 검색"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-input bg-background py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#d3c1ff]"
+              className="flex-1 border-0 bg-transparent text-[14px] text-gray-900 placeholder:text-gray-400 focus:outline-none"
             />
           </div>
-          <button className="p-2">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="5" r="1" fill="currentColor" />
-              <circle cx="12" cy="12" r="1" fill="currentColor" />
-              <circle cx="12" cy="19" r="1" fill="currentColor" />
-            </svg>
+          <button className="flex h-9 w-9 items-center justify-center hover:bg-gray-50 rounded-lg">
+            <SlidersHorizontal className="h-[18px] w-[18px] text-gray-400 stroke-[1.5]" />
           </button>
         </div>
 
         {/* Category Tabs */}
-        <div className="no-scrollbar mb-4 flex gap-2 overflow-x-auto">
-          {POLICY_CATEGORIES.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                selectedCategory === category
-                  ? "bg-[#d3c1ff] text-foreground"
-                  : "bg-muted text-muted-foreground"
-              }`}
-            >
-              {category}
-            </button>
-          ))}
+        <div className="overflow-x-auto scrollbar-hide px-3.5 pb-2.5">
+          <div className="flex gap-2">
+            {POLICY_CATEGORIES.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-colors whitespace-nowrap ${
+                  selectedCategory === category
+                    ? "bg-[#b69df8] text-white"
+                    : "bg-[#f5f5f5] text-black hover:bg-[#efefef]"
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* New Proposal Button */}
         <button
           onClick={() => router.push("/proposals/new")}
-          className="mb-4 w-full rounded-xl bg-[#d3c1ff] py-3 text-center font-medium transition-colors hover:bg-[#c5b3f0] active:bg-[#b7a5e2]"
+          className="mx-3.5 mb-3 w-[calc(100%-1.75rem)] rounded-xl bg-[#b69df8] py-3 text-center font-medium text-white transition-colors hover:bg-[#a88def] active:bg-[#9a7de6]"
         >
           새로운 정책 제안하기
         </button>
 
         {/* Sort Dropdown */}
-        <div className="flex justify-end">
-          <button className="flex items-center gap-1 rounded-md border border-input bg-background px-3 py-1.5 text-sm text-muted-foreground">
-            <span>최신순</span>
-            <ChevronDown className="h-4 w-4" />
+        <div className="flex justify-end px-3.5 pb-2.5">
+          <button className="flex items-center gap-1.5 rounded-full border border-[#d0d0d0] bg-white px-3 py-1.5 text-sm text-[#666666] hover:bg-gray-50 transition-colors">
+            <ArrowUpDown className="h-3.5 w-3.5" />
+            최신순
+            <ChevronDown className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
 
       {/* Proposals List */}
-      <div className="flex-1 space-y-4 px-4 pb-20">
+      <div className="flex-1 space-y-3 px-4 pb-20 pt-4">
         {proposals.map((proposal) => (
           <button
             key={proposal.id}
             onClick={() => router.push(`/proposals/${proposal.id}`)}
-            className="w-full rounded-2xl border border-border bg-card p-4 text-left transition-shadow hover:shadow-sm"
+            className="w-full rounded-xl border-0 bg-white p-3.5 text-left shadow-sm transition-shadow hover:shadow-md"
           >
             {/* Tags and Date */}
-            <div className="mb-3 flex items-center justify-between">
-              <div className="flex gap-2">
+            <div className="mb-2.5 flex items-center justify-between">
+              <div className="flex gap-1.5">
                 {proposal.tags?.map((tag) => (
                   <span
                     key={tag.id}
-                    className="rounded-full bg-[#d3c1ff] px-3 py-1 text-xs font-medium"
+                    className="rounded bg-[#b69df8] px-2.5 py-0.5 text-xs font-medium text-white"
                   >
                     {tag.name}
                   </span>
                 ))}
               </div>
-              <span className="text-xs text-muted-foreground">
+              <span className="text-xs text-[#929292]">
                 {getRelativeTime(proposal.created_at)}
               </span>
             </div>
 
             {/* Title */}
-            <h3 className="mb-2 text-base font-semibold leading-snug">
+            <h3 className="mb-2 text-[14px] font-semibold leading-snug text-black">
               {proposal.title}
             </h3>
 
             {/* Content */}
-            <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
+            <p className="mb-3 text-[13px] leading-relaxed text-[#666666]">
               {proposal.content}
             </p>
 
             {/* Author Info */}
-            <div className="mb-4 flex items-center gap-3">
-              <div className="h-10 w-10 shrink-0 rounded-full bg-muted" />
+            <div className="mb-3 flex items-center gap-2.5">
+              <div className="h-9 w-9 shrink-0 rounded-full bg-[#f5f5f5]" />
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">{proposal.author.nickname}</span>
-                <span className="rounded-full bg-[#d3c1ff] px-2.5 py-0.5 text-xs font-medium">
+                <span className="text-[13px] font-medium text-black">{proposal.author.nickname}</span>
+                <span className="rounded bg-[#b69df8] px-2 py-0.5 text-xs font-medium text-white">
                   {proposal.author.region}
                 </span>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-between border-t border-border pt-3">
-              <div className="flex items-center gap-4">
+            <div className="flex items-center justify-between border-t border-gray-100 pt-2.5">
+              <div className="flex items-center gap-3">
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
                     handleLike(proposal.id)
                   }}
-                  className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="flex items-center gap-1 text-[13px] text-[#929292] transition-colors hover:text-[#b69df8]"
                 >
                   <Heart
-                    className={`h-5 w-5 ${proposal.isLiked ? "fill-red-500 text-red-500" : ""}`}
+                    className={`h-[17px] w-[17px] ${proposal.isLiked ? "fill-[#b69df8] text-[#b69df8]" : ""}`}
                   />
                   <span>동의해요 {proposal.likes}</span>
                 </button>
                 <button
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="flex items-center gap-1 text-[13px] text-[#929292] transition-colors hover:text-[#b69df8]"
                 >
-                  <MessageCircle className="h-5 w-5" />
+                  <MessageCircle className="h-[17px] w-[17px]" />
                   <span>{proposal.comments}</span>
                 </button>
               </div>
@@ -211,10 +210,10 @@ export default function ProposalsPage() {
                   e.stopPropagation()
                   handleBookmark(proposal.id)
                 }}
-                className="text-muted-foreground transition-colors hover:text-foreground"
+                className="text-[#929292] transition-colors hover:text-[#b69df8]"
               >
                 <Bookmark
-                  className={`h-5 w-5 ${proposal.isBookmarked ? "fill-current" : ""}`}
+                  className={`h-[18px] w-[18px] ${proposal.isBookmarked ? "fill-[#b69df8] text-[#b69df8]" : ""}`}
                 />
               </button>
             </div>
