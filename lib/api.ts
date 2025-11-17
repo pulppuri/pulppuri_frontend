@@ -24,6 +24,8 @@ export const API_ENDPOINTS = {
   GET_EXAMPLES: "/examples",
   GET_EXAMPLE_BY_ID: "/examples/:id",
   CREATE_EXAMPLE: "/examples",
+  UPDATE_EXAMPLE: "/examples/:id", // Added update and delete endpoints
+  DELETE_EXAMPLE: "/examples/:id",
   LIKE_EXAMPLE: "/examples/:id/like",
   BOOKMARK_EXAMPLE: "/examples/:id/bookmark",
   GET_EXAMPLE_COMMENTS: "/examples/:id/comments",

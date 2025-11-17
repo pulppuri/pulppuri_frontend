@@ -66,8 +66,8 @@ export default function PoliciesPage() {
       return
     }
 
-    // TODO: Fetch examples from backend
-    // fetchExamples()
+    const customExamples = JSON.parse(localStorage.getItem("customExamples") || "[]")
+    setExamples([...customExamples, ...MOCK_EXAMPLES])
   }, [router])
 
   const handleLike = (id: number) => {
@@ -223,10 +223,7 @@ export default function PoliciesPage() {
       </div>
 
       <button
-        onClick={() => {
-          // TODO: Navigate to add policy example page
-          console.log("[v0] Add policy example button clicked")
-        }}
+        onClick={() => router.push("/policies/new")}
         className="fixed bottom-20 right-5 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-[#b69df8] text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
       >
         <Plus className="h-6 w-6" />
