@@ -189,7 +189,7 @@ export default function MyPage() {
               >
                 <span
                   className={`absolute top-1 h-5 w-5 rounded-full bg-white transition-transform ${
-                    notificationEnabled ? "translate-x-6" : "translate-x-1"
+                    notificationEnabled ? "translate-x-1" : "translate-x-[26px]"
                   }`}
                 />
               </button>

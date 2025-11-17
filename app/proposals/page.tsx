@@ -84,7 +84,7 @@ export default function ProposalsPage() {
       {/* Header with Search */}
       <div className="sticky top-0 z-10 bg-white border-b border-gray-100">
         <div className="flex items-center gap-2.5 p-3.5">
-          <div className="flex flex-1 items-center gap-2.5 rounded-xl bg-[#f5f5f5] px-3.5 py-2.5 border border-gray-100">
+          <div className="flex flex-1 items-center gap-2.5 rounded-xl bg-[#fafafa] px-3.5 py-2.5 border border-gray-100">
             <Search className="h-[18px] w-[18px] text-gray-400 stroke-[1.5]" />
             <input
               type="text"
