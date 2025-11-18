@@ -23,7 +23,6 @@ const MOCK_EXAMPLES: Example[] = [
     created_at: Date.now(),
     updated_at: Date.now(),
     tags: [
-      { id: 1, name: "행정" },
       { id: 2, name: "청년" },
     ],
     likes: 50,
