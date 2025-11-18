@@ -23,8 +23,8 @@ const MOCK_EXAMPLES: Example[] = [
     created_at: Date.now(),
     updated_at: Date.now(),
     tags: [
-      { id: 1, name: "청년" },
-      { id: 2, name: "정주" },
+      { id: 1, name: "행정" },
+      { id: 2, name: "청년" },
     ],
     likes: 50,
     comments: 50,
@@ -164,13 +164,10 @@ export default function PoliciesPage() {
                 
                 {/* Tags positioned at bottom left of thumbnail */}
                 <div className="absolute bottom-2.5 left-2.5 flex gap-1.5">
-                  <span className="rounded bg-white px-2 py-0.5 text-xs font-medium text-black">
-                    {example.reference}
-                  </span>
-                  {example.tags?.slice(0, 1).map((tag) => (
+                  {example.tags?.slice(0, 2).map((tag) => (
                     <span 
                       key={tag.id} 
-                      className="rounded bg-[#b69df8] px-2 py-0.5 text-xs font-medium text-white"
+                      className="rounded bg-[#c5b0ff] px-2 py-0.5 text-xs font-medium text-white"
                     >
                       {tag.name}
                     </span>

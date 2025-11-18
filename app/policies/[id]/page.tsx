@@ -4,11 +4,13 @@ import { useState, useEffect } from "react"
 import { useRouter, useParams } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, Heart, MessageCircle, ThumbsUp } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
 import type { Example } from "@/types"
 
 // Mock detailed example data
 const MOCK_EXAMPLE_DETAIL: Example & {
   fullContent: string
+  detailedContent?: string // Added markdown content field from backend
   targetAudience: string[]
   mainContent: {
     housing: string[]
@@ -50,6 +52,30 @@ const MOCK_EXAMPLE_DETAIL: Example & {
   isLiked: false,
   isBookmarked: false,
   fullContent: "◯◯군이 지역 청년들의 안정적인 지원을 듣기 위해 '청년 지원정책' 종합정책을 올해 3월부터 시행한다.",
+  detailedContent: `
+## 정책 대상
+
+- 만 19세에서 34세 이하의 ◯◯ 거주 청년
+- 취업 준비 중이거나 사회초년생, 창업을 계획 중인 청년 등
+- 연소득 기준 이하 청년들도 포함하여 폭넓게 참여 가능
+
+## 주요 내용
+
+### 1. 주거 안정 지원
+
+- 청년 1인 가구를 위한 월세 지원(최대 20만 원, 1년간)
+- 청년 전용 공공임대주택 100세대 공급
+
+### 2. 창업 지원
+
+- 예비창업자에게 최대 1,000만 원 창업 초기자금 및 멘토 제공
+- 공영 시설 공공 오피스·창업공간 무료 이용
+
+### 3. 마음건강 프로그램
+
+- 취업 스트레스와 불안 예술을 위한 상담심리 무료 제공(연 5회)
+- 또래 커뮤니티 프로그램 운영으로 사회적 관계망 형성 지원
+  `,
   targetAudience: [
     "만 19세에서 34세 이하의 ◯◯ 거주 청년",
     "취업 준비 중이거나 사회초년생, 창업을 계획 중인 청년 등",
@@ -122,6 +148,7 @@ export default function PolicyDetailPage() {
 
   useEffect(() => {
     // TODO: Fetch example detail from backend using params.id
+    // The backend should return detailedContent as markdown string
     // const fetchExampleDetail = async () => {
     //   const response = await api.get(`/examples/${params.id}`)
     //   setExample(response.data)
@@ -221,10 +248,10 @@ export default function PolicyDetailPage() {
 
       {/* Content */}
       <div className="space-y-6 px-4 pt-5">
-        {/* Tags */}
+        {/* Tags - Changed to purple background */}
         <div className="flex gap-2">
           {example.tags?.map((tag) => (
-            <span key={tag.id} className="rounded-md bg-muted px-3 py-1 text-sm font-medium">
+            <span key={tag.id} className="rounded-md bg-[#c5b0ff] px-3 py-1 text-sm font-medium text-white">
               {tag.name}
             </span>
           ))}
@@ -242,65 +269,98 @@ export default function PolicyDetailPage() {
         {/* Summary */}
         <p className="text-[15px] leading-relaxed text-foreground/90">{example.fullContent}</p>
 
-        {/* Policy Details */}
-        <div className="space-y-4 rounded-lg bg-muted/30 p-4">
-          <div>
-            <h3 className="mb-2 flex items-center gap-1.5 text-sm font-bold">
-              <span className="flex h-5 w-5 items-center justify-center rounded bg-primary text-xs text-primary-foreground">
-                📋
-              </span>
-              정책 대상
-            </h3>
-            <ul className="space-y-1 pl-6 text-[15px]">
-              {example.targetAudience.map((item, idx) => (
-                <li key={idx} className="list-disc leading-relaxed">
-                  {item}
-                </li>
-              ))}
-            </ul>
+        {example.detailedContent && (
+          <div className="markdown-content rounded-lg bg-muted/30 p-4">
+            <ReactMarkdown
+              components={{
+                h2: ({ children }) => (
+                  <h2 className="mb-2 mt-4 flex items-center gap-1.5 text-sm font-bold first:mt-0">
+                    <span className="flex h-5 w-5 items-center justify-center rounded bg-[#c5b0ff] text-xs text-white">
+                      📋
+                    </span>
+                    {children}
+                  </h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="mb-1 mt-3 font-semibold text-[15px]">{children}</h3>
+                ),
+                ul: ({ children }) => (
+                  <ul className="mb-3 space-y-1 pl-6 text-[15px] last:mb-0">{children}</ul>
+                ),
+                li: ({ children }) => (
+                  <li className="list-disc leading-relaxed">{children}</li>
+                ),
+                p: ({ children }) => (
+                  <p className="mb-2 text-[15px] leading-relaxed last:mb-0">{children}</p>
+                ),
+              }}
+            >
+              {example.detailedContent}
+            </ReactMarkdown>
           </div>
+        )}
 
-          <div>
-            <h3 className="mb-2 flex items-center gap-1.5 text-sm font-bold">
-              <span className="flex h-5 w-5 items-center justify-center rounded bg-primary text-xs text-primary-foreground">
-                📌
-              </span>
-              주요 내용
-            </h3>
-            <div className="space-y-3 pl-6">
-              <div>
-                <p className="mb-1 font-semibold text-[15px]">1. 주거 안정 지원</p>
-                <ul className="space-y-1 pl-4 text-[15px]">
-                  {example.mainContent.housing.map((item, idx) => (
-                    <li key={idx} className="list-disc leading-relaxed">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="mb-1 font-semibold text-[15px]">2. 창업 지원</p>
-                <ul className="space-y-1 pl-4 text-[15px]">
-                  {example.mainContent.startup.map((item, idx) => (
-                    <li key={idx} className="list-disc leading-relaxed">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="mb-1 font-semibold text-[15px]">3. 마음건강 프로그램</p>
-                <ul className="space-y-1 pl-4 text-[15px]">
-                  {example.mainContent.mentalHealth.map((item, idx) => (
-                    <li key={idx} className="list-disc leading-relaxed">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+        {/* Fallback: Show structured content if no markdown */}
+        {!example.detailedContent && (
+          <div className="space-y-4 rounded-lg bg-muted/30 p-4">
+            <div>
+              <h3 className="mb-2 flex items-center gap-1.5 text-sm font-bold">
+                <span className="flex h-5 w-5 items-center justify-center rounded bg-[#c5b0ff] text-xs text-white">
+                  📋
+                </span>
+                정책 대상
+              </h3>
+              <ul className="space-y-1 pl-6 text-[15px]">
+                {example.targetAudience.map((item, idx) => (
+                  <li key={idx} className="list-disc leading-relaxed">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="mb-2 flex items-center gap-1.5 text-sm font-bold">
+                <span className="flex h-5 w-5 items-center justify-center rounded bg-[#c5b0ff] text-xs text-white">
+                  📌
+                </span>
+                주요 내용
+              </h3>
+              <div className="space-y-3 pl-6">
+                <div>
+                  <p className="mb-1 font-semibold text-[15px]">1. 주거 안정 지원</p>
+                  <ul className="space-y-1 pl-4 text-[15px]">
+                    {example.mainContent.housing.map((item, idx) => (
+                      <li key={idx} className="list-disc leading-relaxed">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="mb-1 font-semibold text-[15px]">2. 창업 지원</p>
+                  <ul className="space-y-1 pl-4 text-[15px]">
+                    {example.mainContent.startup.map((item, idx) => (
+                      <li key={idx} className="list-disc leading-relaxed">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="mb-1 font-semibold text-[15px]">3. 마음건강 프로그램</p>
+                  <ul className="space-y-1 pl-4 text-[15px]">
+                    {example.mainContent.mentalHealth.map((item, idx) => (
+                      <li key={idx} className="list-disc leading-relaxed">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Article Link */}
         <div className="flex justify-end">
@@ -312,10 +372,10 @@ export default function PolicyDetailPage() {
           </button>
         </div>
 
-        {/* Propose Policy Button */}
+        {/* Propose Policy Button - Darker purple color */}
         <Button
           onClick={handleProposePolicy}
-          className="w-full rounded-lg bg-[#d3c1ff] py-6 text-base font-semibold hover:bg-[#c5b0ff]"
+          className="w-full rounded-lg bg-[#b89dff] py-6 text-base font-semibold text-white hover:bg-[#a88dff]"
         >
           이 사례로 새로운 정책 제안하기
         </Button>

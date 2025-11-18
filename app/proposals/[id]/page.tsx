@@ -29,7 +29,7 @@ const mockProposal = {
         category: "교통"
       }
     ],
-    solution: "대전시 타슈 사례를 보면 OO 예산으로 OO명의 이용 증가하고 팀니다. 우수사례에서 보였듯이 옥천읍에도 공용 자전거를 학교 근 처에 설치해주셨으면",
+    solution: "대전시 타슈 사례를 보면 OO 예산으로 OO명의 이용 증가하고 팀니다. 우수사례에서 보였듯이 옥천읍에도 공용 자전거를 학교 근처에 설치해주셨으면",
     expectedEffects: "월별 배경과 이동할 수 있어서 삶의 질이 높아져요"
   }
 }
@@ -98,9 +98,9 @@ export default function ProposalDetailPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-8">
+    <div className="flex min-h-screen flex-col bg-white pb-8">
       {/* Header */}
-      <header className="sticky top-0 z-10 flex items-center gap-3 border-b border-border bg-background px-4 py-3">
+      <header className="sticky top-0 z-10 flex items-center gap-3 border-b border-border bg-white px-4 py-3">
         <button
           onClick={() => router.back()}
           className="text-foreground"
@@ -116,7 +116,7 @@ export default function ProposalDetailPage() {
           {proposal.tags.map((tag) => (
             <span
               key={tag.id}
-              className="rounded-full bg-[#d3c1ff] px-3 py-1 text-sm font-medium"
+              className="rounded-full bg-[#b8a4e8] px-4 py-1.5 text-sm font-medium text-[#1a1a1a]"
             >
               {tag.name}
             </span>
@@ -124,20 +124,20 @@ export default function ProposalDetailPage() {
         </div>
 
         {/* Title */}
-        <h2 className="text-xl font-bold leading-tight">
+        <h2 className="text-xl font-bold leading-tight text-[#1a1a1a]">
           {proposal.title}
         </h2>
 
         {/* Author Info */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-[#e9d5ff]" />
+            <div className="h-12 w-12 rounded-full bg-[#d4c5f0]" />
             <div>
-              <p className="font-medium">{proposal.author.nickname}</p>
-              <p className="text-sm text-muted-foreground">{proposal.createdAt}</p>
+              <p className="font-medium text-[#1a1a1a]">{proposal.author.nickname}</p>
+              <p className="text-sm text-[#999999]">{proposal.createdAt}</p>
             </div>
           </div>
-          <div className="text-right text-sm text-muted-foreground">
+          <div className="text-right text-sm text-[#999999]">
             <p>동의 {proposal.agrees}</p>
             <p>조회 {proposal.views}</p>
           </div>
@@ -146,82 +146,85 @@ export default function ProposalDetailPage() {
         {/* Agree Button */}
         <button
           onClick={handleAgree}
-          className={`w-full rounded-xl py-3 text-center font-medium transition-colors ${
+          className={`w-full rounded-xl py-4 text-center font-medium transition-all duration-300 ease-out active:scale-95 ${
             proposal.isAgreed
-              ? "bg-[#b497e8] text-white"
-              : "bg-[#d3c1ff] text-foreground hover:bg-[#c5b3f0]"
+              ? "bg-[#c8b6e2] text-[#1a1a1a] shadow-md"
+              : "bg-[#ddd0f0] text-[#1a1a1a] hover:bg-[#d4c5f0] hover:shadow-lg active:shadow-md"
           }`}
         >
           동의해요
         </button>
 
-        {/* Section 1: Problem Definition */}
-        <div className="rounded-2xl bg-muted/30 p-4">
-          <h3 className="mb-3 font-semibold">1. 문제 정의</h3>
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            {proposal.sections.problem}
-          </p>
-        </div>
-
-        {/* Section 2: Related Policy Examples */}
-        <div className="rounded-2xl bg-muted/30 p-4">
-          <h3 className="mb-3 font-semibold">2. 관련 정책 사례</h3>
+        {/* Section Container */}
+        <div className="space-y-6 rounded-2xl bg-[#f5f5f5] p-5">
+          {/* Section 1: Problem Definition */}
           <div className="space-y-3">
-            {proposal.sections.relatedPolicies.map((policy) => (
-              <button
-                key={policy.id}
-                onClick={() => handlePolicyClick(policy.id)}
-                className="w-full rounded-xl bg-white p-4 text-left transition-shadow hover:shadow-sm"
-              >
-                <div className="mb-2 flex items-center gap-2">
-                  <span className="rounded bg-muted px-2 py-0.5 text-xs font-medium">
-                    {policy.region}
-                  </span>
-                  <span className="rounded-full bg-[#d3c1ff] px-2.5 py-0.5 text-xs font-medium">
-                    {policy.category}
-                  </span>
-                </div>
-                <p className="text-sm font-medium leading-snug">{policy.title}</p>
-              </button>
-            ))}
+            <h3 className="text-lg font-bold text-[#1a1a1a]">1. 문제 정의</h3>
+            <p className="text-base leading-relaxed text-[#666666]">
+              {proposal.sections.problem}
+            </p>
           </div>
-        </div>
 
-        {/* Section 3: Solution */}
-        <div className="rounded-2xl bg-muted/30 p-4">
-          <h3 className="mb-3 font-semibold">3. 해결 방안 제시</h3>
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            {proposal.sections.solution}
-          </p>
-        </div>
+          {/* Section 2: Related Policy Examples */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-bold text-[#1a1a1a]">2. 관련 정책 사례</h3>
+            <div className="space-y-3">
+              {proposal.sections.relatedPolicies.map((policy) => (
+                <button
+                  key={policy.id}
+                  onClick={() => handlePolicyClick(policy.id)}
+                  className="w-full rounded-xl bg-white p-4 text-left transition-shadow hover:shadow-sm"
+                >
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="rounded bg-[#f5f5f5] px-2.5 py-1 text-xs font-medium text-[#1a1a1a]">
+                      {policy.region}
+                    </span>
+                    <span className="rounded-full bg-[#b8a4e8] px-2.5 py-1 text-xs font-medium text-[#1a1a1a]">
+                      {policy.category}
+                    </span>
+                  </div>
+                  <p className="text-sm font-medium leading-snug text-[#1a1a1a]">{policy.title}</p>
+                </button>
+              ))}
+            </div>
+          </div>
 
-        {/* Section 4: Expected Effects */}
-        <div className="rounded-2xl bg-muted/30 p-4">
-          <h3 className="mb-3 font-semibold">4. 기대 효과</h3>
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            {proposal.sections.expectedEffects}
-          </p>
+          {/* Section 3: Solution */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-bold text-[#1a1a1a]">3. 해결 방안 제시</h3>
+            <p className="text-base leading-relaxed text-[#666666]">
+              {proposal.sections.solution}
+            </p>
+          </div>
+
+          {/* Section 4: Expected Effects */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-bold text-[#1a1a1a]">4. 기대 효과</h3>
+            <p className="text-base leading-relaxed text-[#666666]">
+              {proposal.sections.expectedEffects}
+            </p>
+          </div>
         </div>
 
         {/* More Related Policies */}
         <div>
-          <h3 className="mb-4 text-lg font-semibold">관련 정책 더보기</h3>
+          <h3 className="mb-4 text-lg font-bold text-[#1a1a1a]">관련 정책 더보기</h3>
           <div className="space-y-3">
             {mockRelatedPolicies.map((policy) => (
               <button
                 key={policy.id}
                 onClick={() => handlePolicyClick(policy.id)}
-                className="w-full rounded-xl bg-muted/30 p-4 text-left transition-shadow hover:shadow-sm"
+                className="w-full rounded-xl bg-[#f5f5f5] p-4 text-left transition-shadow hover:shadow-md"
               >
                 <div className="mb-2 flex items-center gap-2">
-                  <span className="rounded bg-muted px-2 py-0.5 text-xs font-medium">
+                  <span className="rounded bg-white px-2.5 py-1 text-xs font-medium text-[#1a1a1a]">
                     {policy.region}
                   </span>
-                  <span className="rounded-full bg-[#d3c1ff] px-2.5 py-0.5 text-xs font-medium">
+                  <span className="rounded-full bg-[#b8a4e8] px-2.5 py-1 text-xs font-medium text-[#1a1a1a]">
                     {policy.category}
                   </span>
                 </div>
-                <p className="text-sm font-medium leading-snug">{policy.title}</p>
+                <p className="text-sm font-medium leading-snug text-[#1a1a1a]">{policy.title}</p>
               </button>
             ))}
           </div>
@@ -229,32 +232,32 @@ export default function ProposalDetailPage() {
 
         {/* Comments Section */}
         <div>
-          <h3 className="mb-4 text-lg font-semibold">댓글</h3>
+          <h3 className="mb-4 text-lg font-bold text-[#1a1a1a]">댓글</h3>
           <div className="space-y-3">
             {comments.map((comment) => (
               <div
                 key={comment.id}
-                className="rounded-xl border border-border bg-card p-4"
+                className="rounded-xl bg-[#fafafa] p-4"
               >
                 <div className="mb-3 flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-muted" />
+                  <div className="h-10 w-10 rounded-full bg-[#e0e0e0]" />
                   <div>
-                    <p className="font-medium">{comment.author}</p>
-                    <p className="text-xs text-muted-foreground">{comment.createdAt}</p>
+                    <p className="font-medium text-[#1a1a1a]">{comment.author}</p>
+                    <p className="text-xs text-[#999999]">{comment.createdAt}</p>
                   </div>
                 </div>
-                <p className="mb-3 text-sm leading-relaxed">{comment.content}</p>
+                <p className="mb-3 text-sm leading-relaxed text-[#1a1a1a]">{comment.content}</p>
                 <div className="flex items-center gap-4">
                   <button
                     onClick={() => handleCommentLike(comment.id)}
-                    className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    className="flex items-center gap-1.5 text-sm text-[#999999] transition-colors hover:text-[#666666]"
                   >
                     <Heart
                       className={`h-4 w-4 ${comment.isLiked ? "fill-red-500 text-red-500" : ""}`}
                     />
                     <span>{comment.likes}</span>
                   </button>
-                  <button className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  <button className="text-sm text-[#999999] transition-colors hover:text-[#666666]">
                     답글
                   </button>
                 </div>
