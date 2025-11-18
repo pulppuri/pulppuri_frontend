@@ -425,19 +425,20 @@ export default function PolicyDetailPage() {
 
         {example.relatedProposals.length > 0 && (
           <div className="space-y-4">
-            <h3 className="text-lg font-bold">관련 정책 제안</h3>
+            <h3 className="text-lg font-bold">이 정책을 참고한 제안</h3>
             <div className="space-y-3">
               {example.relatedProposals.map((proposal) => (
                 <div
                   key={proposal.id}
                   onClick={() => handleProposalClick(proposal.id)}
-                  className="cursor-pointer space-y-3 rounded-2xl bg-[#f5f5f5] p-4 transition-all hover:bg-[#eeeeee]"
+                  className="cursor-pointer space-y-3 rounded-2xl border bg-white p-4 shadow-sm transition-all hover:shadow-md"
                 >
                   <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#b4a0e5] to-[#d4c5f0]" />
-                    <span className="font-medium">{proposal.user.nickname}</span>
+                    <div className="h-10 w-10 rounded-full bg-[#e5e5e5]" />
+                    <div className="flex-1">
+                      <p className="text-sm leading-relaxed">{proposal.content}</p>
+                    </div>
                   </div>
-                  <p className="text-sm leading-relaxed">{proposal.content}</p>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <button
                       onClick={(e) => handleProposalLike(proposal.id, e)}
@@ -467,26 +468,34 @@ export default function PolicyDetailPage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold">댓글</h3>
-              <span className="text-sm text-muted-foreground">{example.commentsList.length}개</span>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {example.commentsList.map((comment) => (
-                <div key={comment.id} className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#b4a0e5] to-[#d4c5f0]" />
-                    <span className="font-medium">{comment.user.nickname}</span>
-                    <span className="text-sm text-muted-foreground">{comment.date}</span>
+                <div key={comment.id} className="space-y-3 rounded-2xl border bg-white p-4 shadow-sm">
+                  <div className="flex items-start gap-3">
+                    <div className="h-10 w-10 flex-shrink-0 rounded-full bg-[#e5e5e5]" />
+                    <div className="flex-1 space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-sm">{comment.user.nickname}</span>
+                        <span className="text-xs text-muted-foreground">{comment.date}</span>
+                      </div>
+                      <p className="text-sm leading-relaxed">{comment.content}</p>
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => handleCommentLike(comment.id)}
+                          className="flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          <ThumbsUp
+                            className={`h-3.5 w-3.5 ${commentLikes[comment.id] ? "fill-[#b4a0e5] text-[#b4a0e5]" : ""}`}
+                          />
+                          <span>{comment.likes + (commentLikes[comment.id] ? 1 : 0)}</span>
+                        </button>
+                        <button className="text-xs text-muted-foreground transition-colors hover:text-foreground">
+                          답글
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <p className="pl-10 text-sm leading-relaxed">{comment.content}</p>
-                  <button
-                    onClick={() => handleCommentLike(comment.id)}
-                    className="flex items-center gap-1 pl-10 text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    <Heart
-                      className={`h-4 w-4 ${commentLikes[comment.id] ? "fill-red-500 text-red-500" : ""}`}
-                    />
-                    <span>{comment.likes + (commentLikes[comment.id] ? 1 : 0)}</span>
-                  </button>
                 </div>
               ))}
             </div>
