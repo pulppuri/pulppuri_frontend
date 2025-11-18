@@ -76,28 +76,25 @@ export default function OnboardingPage() {
   }
 
   const handleSubmit = async () => {
-    // TODO: Backend API 연동
-    // const response = await fetch(`${API_CONFIG.BASE_URL}/users`, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(formData),
-    // })
-
-    console.log("[v0] Onboarding completed:", formData)
+    console.log("[v0] Onboarding started:", formData)
 
     try {
-      // Store user data in localStorage for now
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          id: Math.floor(Math.random() * 10000),
-          ...formData,
-          rid: 1, // Mock region id
-        }),
-      )
+      const userData = {
+        id: Math.floor(Math.random() * 10000),
+        ...formData,
+        rid: 1,
+      }
 
-      // Navigate to main policy page
-      router.push("/policies")
+      console.log("[v0] Storing user data:", userData)
+      
+      // Store user data in localStorage
+      localStorage.setItem("user", JSON.stringify(userData))
+
+      console.log("[v0] User data stored, navigating...")
+      
+      setTimeout(() => {
+        router.push("/policies")
+      }, 100)
     } catch (error) {
       console.error("[v0] Onboarding error:", error)
       alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.")
